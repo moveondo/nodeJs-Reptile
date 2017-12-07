@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8"/>
+    <title><%= title %></title>
+    <!-- <link rel='stylesheet' href='/stylesheets/style.css' /> -->
+    <style media="screen">
+      body {
+      padding: 20px 50px;
+      font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+      }
+      a {
+      color: #00B7FF;
+      cursor: pointer;
+      }
+      .container{position: relative;width: 1100px;overflow: hidden;zoom:1;}
+      .jobs{margin: 30px; float: left;}
+      .jobs span{ color: green; font-weight: bold;}
+      .btn{cursor: pointer;}
+      .fetching{display: none;color: red;}
+      .footer{clear: both;}
+      /* Table Head */
+    table thead th {
+    background-color: rgb(128, 102, 160);
+    color: #fff;
+    border-bottom-width: 0;
+    }
+
+    /* Column Style */
+    table td {
+    color: #555;
+    }
+    /* Heading and Column Style */
+    table tr, table th {
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgb(128, 102, 160);
+    }
+
+    /* Padding and font style */
+    table td, table th {
+    padding: 5px 10px;
+    font-size: 12px;
+    font-family: Verdana;
+    font-weight: bold;
+    }
+    </style>
+  </head>
+  <body>
+    <h3>【nodejs爬虫】 获取上海链家房屋价格信息</h3>
+    <p>初始化完成 ...</p>
+    <p><button class="btn" id="btn0" onclick="cheerFetch(1)">点击开始抓取第一页</button></p>
+    <div class="container">
+    <!--<div class="jobs"> </div>-->
+    </div>
+    <div class="footer">
+    <p class="fetching">数据抓取中 ... 请稍后</p>
+        <button class="btn" id="btn1" onclick="cheerFetch(--currentPage)">抓取上一页</button>
+        <button class="btn" id="btn2" onclick="cheerFetch(++currentPage)">抓取下一页</button>
+    </div>
+  <script src="//mobiccdai.ppdaicdn.com/source/ccdcps6/js/jquery.min.js"></script>
+    <script type="text/javascript">
+    function getData(str){   //获取到的数据有杂乱..需要把前面部分去掉,只需要data（<em>......<em>  data)
+        if(str){
+        return str.slice(str.lastIndexOf(">")+1);
+    }
+}
+
+document.getElementById("btn1").style.visibility = "hidden";
+document.getElementById("btn2").style.visibility = "hidden";
+var currentPage = 0;  //page初始0
+
+function cheerFetch(_page){  //抓取数据处理函数
+    if(_page == 1){
+        currentPage  = 1;      //开始抓取则更改page
+    }
+    $(document).ajaxSend(function(event, xhr, settings) {  //抓取中...
+        $(".fetching").css("display","block");
+    });
+    $(document).ajaxSuccess(function(event, xhr, settings) {  //抓取成功
+        $(".fetching").css("display","none");
+    });
+    $.ajax({   //开始发送ajax请求至路径 /getJobs  进而作页面抓取处理
+        data:{page:_page},  //参数 page = _page
+        dataType: "json",
+        type: "get",
+        url: "/getJobs",
+        success: function(data){   //收到返回的json数据
+            console.log("共有数据："+data.jobs.length);
+
+            $(".container").empty();
+
+            if(data.jobs.length == 0){
+                alert("Error2: 未找到数据..");
+                return;
+            }
+            var tablelength=data.jobs.length;
+            var html = "";
+                html += " <table cellspacing='0' cellpadding='0'>";
+                html += "<tr>";
+                html += "<th>序号：</th>";
+                html += " <th>楼层</th>";
+                html += "<th>总价</th>";
+                html += "<th>单价</th>";
+                html += " <th>楼盘地址</th>";
+                html += "<th>距离</th>";
+                html += " <th>是否满五年</th>";
+                html += " <th>有无钥匙</th>";
+                html += "</tr>";
+                for (var i = 0; i < tablelength; i++) {
+                    var job = data.jobs[i];
+                  // if(job.totalPrice<=300){
+                    html += "<tr>";
+                   // html += "<td>" + _data.content.lenderInfos[i].lenderName + "</td>";
+                    html += "<td>" +((i+1)+30*(currentPage-1))+"</td>";
+                    html += "<td>" + job.louceng + "</td>";
+                    html += "<td>" + job.totalPrice+job.unit + "</td>";
+                    html += "<td>" + job.salary + "</td>";
+                    html += "<td>" +job.city1+job.city2+job.city0+ "</td>";
+                    html += "<td>" + job.juli + "</td>";
+                    html += "<td>" + job.wu+ "</td>";
+                    html += "<td>" + job.yaoshi+ "</td>";
+                    html += "</tr>";
+                  // }
+                };
+
+                html += "</tbody>";
+                html += "</table>";
+
+            // for(var i=0;i<data.jobs.length;i++){   //遍历数据并提取处理
+            //     var job = data.jobs[i];
+            //     html += "<div class='jobs'><p><span >序号：</span>  "+((i+1)+15*(currentPage-1))+"</p>"+
+            //     // "<p>楼层：<a href='"+job.src+"'target='_blank'>"+job.name+"</a></p>"+
+            //     "<p><span >楼层</span>  "+job.louceng+"</p>"+
+            //     "<p><span>总价：</span>  "+job.totalPrice+job.unit+"</p>"+
+            //     "<p><span>单价：</span>  "+job.salary+"</p>"+
+            //     "<p><span>楼盘:</span>  "+job.city1+job.city2+job.city0+"</p>"+
+            //     "<p><span>距离：</span>  "+job.juli+"</p>"+
+            //     "<p><span>是否满五年：</span>  "+job.wu+"</p>"+
+            //     "<p><span>有无钥匙：</span>  "+job.yaoshi+"</p>"+
+            //     "</div>"
+            // }
+
+            $(".container").append(html);  //展现至页面
+            if(_page == 1){
+                document.getElementById("btn1").style.visibility = "hidden";
+                document.getElementById("btn2").style.visibility = "visible";
+            }else if(_page > 1){
+                document.getElementById("btn1").style.visibility = "visible";
+                document.getElementById("btn2").style.visibility = "visible";
+            }
+        },
+        error: function(){
+            alert("Error1: 未找到数据..");
+        }
+    });
+}
+
+    </script>
+  </body>
+</html>
