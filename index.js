@@ -92,7 +92,7 @@ app.get('/', (req, res)=>{
 // 	        Res.json({  //返回json格式数据给浏览器端
 // 	            jobs:jobs
 // 	        });
-// 					  //console.log(jobs);  //控制台输出岗位名
+// 					  
 // 	    });
 // 	});
 //
