@@ -125,19 +125,7 @@ function cheerFetch(_page){  //抓取数据处理函数
                 html += "</tbody>";
                 html += "</table>";
 
-            // for(var i=0;i<data.jobs.length;i++){   //遍历数据并提取处理
-            //     var job = data.jobs[i];
-            //     html += "<div class='jobs'><p><span >序号：</span>  "+((i+1)+15*(currentPage-1))+"</p>"+
-            //     // "<p>楼层：<a href='"+job.src+"'target='_blank'>"+job.name+"</a></p>"+
-            //     "<p><span >楼层</span>  "+job.louceng+"</p>"+
-            //     "<p><span>总价：</span>  "+job.totalPrice+job.unit+"</p>"+
-            //     "<p><span>单价：</span>  "+job.salary+"</p>"+
-            //     "<p><span>楼盘:</span>  "+job.city1+job.city2+job.city0+"</p>"+
-            //     "<p><span>距离：</span>  "+job.juli+"</p>"+
-            //     "<p><span>是否满五年：</span>  "+job.wu+"</p>"+
-            //     "<p><span>有无钥匙：</span>  "+job.yaoshi+"</p>"+
-            //     "</div>"
-            // }
+       
 
             $(".container").append(html);  //展现至页面
             if(_page == 1){
