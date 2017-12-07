@@ -20,7 +20,7 @@ const ejs = require('ejs');
 
 var app=express();
 app.listen(8087);
-app.use(multer.any());//�����ļ�ͼƬ
+app.use(multer.any());
 // app.use(staticFiles('/www/', __dirname + '/www'));
 
 app.use(express.static(__dirname));
@@ -138,7 +138,7 @@ http.get(url+page,function(res){  //通过get方法获取对应地址中的页�
             job.salary = $(this).find(".info-col.price-item.minor").html(); //单价
              job.juli = $(this).find(".property-tag-container span").eq(0).html(); //距离
              job.wu = $(this).find(".property-tag-container span").eq(1).html(); //满五
-						 job.yaoshi = $(this).find(".property-tag-container span").eq(2).html(); //有误钥匙
+						 job.yaoshi = $(this).find(".property-tag-container span").eq(2).html(); //有钥匙
 
 
             jobs.push(job);
@@ -146,7 +146,7 @@ http.get(url+page,function(res){  //通过get方法获取对应地址中的页�
         Res.json({  //返回json格式数据给浏览器端
             jobs:jobs
         });
-				  console.log(jobs.length);  //控制台输出岗位名
+				  console.log(jobs.length);  
     });
 });
 
