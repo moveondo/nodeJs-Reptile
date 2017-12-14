@@ -132,12 +132,46 @@ function runAsync3(){
 });
 
 ```
+结果为：
 
+ ![](https://github.com/moveondo/nodeJs-Reptile/blob/master/image/async2.png) 
+ 
 ### reject的用法
 
 到这里，你应该对“Promise是什么玩意”有了最基本的了解。那么我们接着来看看ES6的Promise还有哪些功能。我们光用了resolve，还没用reject呢，它是做什么的呢？事实上，我们前面的例子都是只有“执行成功”的回调，还没有“失败”的情况，reject的作用就是把Promise的状态置为rejected，这样我们在then中就能捕捉到，然后执行“失败”情况的回调。看下面的代码。
 
+```
+function getNumber(){
+    var p = new Promise(function(resolve, reject){
+        //做一些异步操作
+        setTimeout(function(){
+            var num = Math.ceil(Math.random()*10); //生成1-10的随机数
+            if(num<=5){
+                resolve(num);
+            }
+            else{
+                reject('数字太大了');
+            }
+        }, 2000);
+    });
+    return p;
+}
 
+getNumber()
+.then(
+    function(data){
+        console.log('resolved');
+        console.log(data);
+    },
+    function(reason, data){
+        console.log('rejected');
+        console.log(reason);
+    }
+);
+```
+多次执行后结果：
+
+ ![](https://github.com/moveondo/nodeJs-Reptile/blob/master/image/reject.png) 
  
 
  
