@@ -132,12 +132,108 @@ function runAsync3(){
 });
 
 ```
+结果为：
 
+ ![](https://github.com/moveondo/nodeJs-Reptile/blob/master/image/async2.png) 
+ 
 ### reject的用法
 
 到这里，你应该对“Promise是什么玩意”有了最基本的了解。那么我们接着来看看ES6的Promise还有哪些功能。我们光用了resolve，还没用reject呢，它是做什么的呢？事实上，我们前面的例子都是只有“执行成功”的回调，还没有“失败”的情况，reject的作用就是把Promise的状态置为rejected，这样我们在then中就能捕捉到，然后执行“失败”情况的回调。看下面的代码。
 
+```
+function getNumber(){
+    var p = new Promise(function(resolve, reject){
+        //做一些异步操作
+        setTimeout(function(){
+            var num = Math.ceil(Math.random()*10); //生成1-10的随机数
+            if(num<=5){
+                resolve(num);
+            }
+            else{
+                reject('数字太大了');
+            }
+        }, 2000);
+    });
+    return p;
+}
 
+getNumber()
+.then(
+    function(data){
+        console.log('resolved');
+        console.log(data);
+    },
+    function(reason, data){
+        console.log('rejected');
+        console.log(reason);
+    }
+);
+```
+多次执行后结果：
+
+ ![](https://github.com/moveondo/nodeJs-Reptile/blob/master/image/reject.png) 
  
+### all的用法
 
+Promise的all方法提供了并行执行异步操作的能力，并且在所有异步操作执行完后才执行回调。我们仍旧使用上面定义好的runAsync1、runAsync2、runAsync3这三个函数，看下面的例子：
+
+```
+Promise
+.all([runAsync1(), runAsync2(), runAsync3()])
+.then(function(results){
+    console.log(results);
+});
+
+```
+ 用Promise.all来执行，all接收一个数组参数，里面的值最终都算返回Promise对象。这样，三个异步操作的并行执行的，等到它们都执行完后才会进到then里面。那么，三个异步操作返回的数据哪里去了呢？都在then里面呢，all会把所有异步操作的结果放进一个数组中传给then，就是上面的results。所以上面代码的输出结果就是：
+ 
+  ![](https://github.com/moveondo/nodeJs-Reptile/blob/master/image/all.png)
+  
+  
+### race的用法
+all方法的效果实际上是「谁跑的慢，以谁为准执行回调」，那么相对的就有另一个方法「谁跑的快，以谁为准执行回调」，这就是race方法，这个词本来就是赛跑的意思。race的用法与all一样，我们把上面runAsync1的延时改为1秒,runAsync2的延时改为2秒,runAsync3的延时改为3秒来看一下：
+
+```
+function runAsync1(){
+    return new Promise(function(resolve, reject){
+        //做一些异步操作
+        setTimeout(function(){
+            console.log('2秒以后了异步吗+1：');
+            resolve('1：执行了');
+        }, 1000);
+    });
+
+}
+function runAsync2(){
+    return new Promise(function(resolve, reject){
+        //做一些异步操作
+        setTimeout(function(){
+           console.log('2秒以后了+2：');
+            resolve('2：执行了');
+        }, 2000);
+    });
+
+}
+function runAsync3(){
+    return new Promise(function(resolve, reject){
+        //做一些异步操作
+        setTimeout(function(){
+            console.log('2秒以后了+3：');
+            resolve('3：执行了');
+        }, 2000);
+    });
+
+}
+
+
+Promise
+.race([ runAsync2(), runAsync3(),runAsync1()])
+.then(function(results){
+    console.log(results);
+});
+```
+
+这三个异步操作同样是并行执行的。结果你应该可以猜到，1秒后runAsync1已经执行完了，此时then里面的就执行了。结果是这样的：
+
+  ![](https://github.com/moveondo/nodeJs-Reptile/blob/master/image/race.png)
  
