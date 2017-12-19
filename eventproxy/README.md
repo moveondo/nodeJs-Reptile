@@ -49,6 +49,8 @@ ep.after('href_html', houses.length, function (house) {
 ![](https://github.com/moveondo/nodeJs-Reptile/blob/master/image/proxy1.png)
 
 
+## 关于eventproxy：
+
 
 
 
