@@ -127,7 +127,67 @@ setInterval(function () {
 ```
 tail与all方法比较类似，都是注册到事件组合上。不同在于，指定事件都触发之后，如果事件依旧持续触发，将会在每次触发时调用handler，极像一条尾巴。
 
+#### 神奇的fail
+```
+ep.fail(callback);
+// 由于参数位相同，它实际是
+ep.fail(function (err) {
+  callback(err);
+});
 
+// 等价于
+ep.bind('error', function (err) {
+  // 卸载掉所有handler
+  ep.unbind();
+  // 异常回调
+  callback(err);
+});
+
+```
+fail方法侦听了error事件，默认处理卸载掉所有handler，并调用回调函数。
+
+
+#### 神奇的done
+```
+ep.done('tpl');
+// 等价于
+function (err, content) {
+  if (err) {
+    // 一旦发生异常，一律交给error事件的handler处理
+    return ep.emit('error', err);
+  }
+  ep.emit('tpl', content);
+}
+
+```
+在Node的最佳实践中，回调函数第一个参数一定会是一个error对象。检测到异常后，将会触发error事件。剩下的参数，将触发事件，传递给对应handler处理。
+
+#### done也接受回调函数
+done方法除了接受事件名外，还接受回调函数。如果是函数时，它将剔除第一个error对象(此时为null)后剩余的参数，传递给该回调函数作为参数。该回调函数无需考虑异常处理。
+
+```
+
+ep.done(function (content) {
+  // 这里无需考虑异常
+  // 手工emit
+  ep.emit('someevent', newcontent);
+});
+
+```
+
+当然手工emit的方式并不太好，我们更进一步的版本：
+
+```
+ep.done('tpl', function (tpl) {
+  // 将内容更改后，返回即可
+  return tpl.trim();
+});
+
+```
+
+注意事项
+
+如果emit需要传递多个参数时，ep.done(event, fn)的方式不能满足需求，还是需要ep.done(fn)，进行手工emit多个参数。
 
 
 
