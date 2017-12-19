@@ -46,7 +46,7 @@ ep.after('href_html', houses.length, function (house) {
 
 输出长这样：
 
-![](https://github.com/moveondo/nodeJs-Reptile/blob/master/image/proxy.png)
+![](https://github.com/moveondo/nodeJs-Reptile/blob/master/image/proxy1.png)
 
 
 
