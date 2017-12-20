@@ -21,14 +21,14 @@ const bodyParser= require('body-parser');
 
 const ejs = require('ejs');
 
-//mysql ���ݿ�������Ϣ
+//mysql
 var config = {
 	host:"127.0.0.1",
 	user:"root",
 	password:'123456'
 }
 
-//����db��function
+
 function connectMysql(){
 
 	var mydb;
@@ -40,11 +40,11 @@ function connectMysql(){
 }
 
 
-//db���Ӵ���ʱ�Ĵ���
+
 function handleError(err){
 
 	if(err){
-		//���������ӶϿ�,�Զ���������
+		
 		if(err.code === 'PROTOCOL_CONNECTION_LOST'){
 			connectMysql();
 		}else{
@@ -55,7 +55,7 @@ function handleError(err){
 
 var app=express();
 app.listen(8087);
-app.use(multer.any());//�����ļ�ͼƬ
+app.use(multer.any());
 // app.use(staticFiles('/www/', __dirname + '/www'));
 
 app.use(express.static(__dirname));
