@@ -44,9 +44,7 @@ ep.after('href_html', houses.length, function (house) {
 
 所有原数据及详情页面的数据在查询完成后进行返回。达到索要效果。
 
-输出长这样：
 
-![](https://github.com/moveondo/nodeJs-Reptile/blob/master/image/proxy1.png)
 
 
 ## 关于eventproxy：
@@ -205,6 +203,7 @@ ep.done('tpl', function (tpl) {
 
 
 参考：http://eventproxy.html5ify.com/
+
 
 
 

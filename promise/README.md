@@ -247,3 +247,4 @@ ES6 Promise的内容就这些吗？是的，能用到的基本就这些。
 我怎么还见过done、finally、success、fail等，这些是啥？这些并不在Promise标准中，而是我们自己实现的语法糖。
  
 本文中所有异步操作均以setTimeout为例子，之所以不使用ajax是为了避免引起混淆，因为谈起ajax，很多人的第一反应就是jquery的ajax，而jquery又有自己的Promise实现。如果你理解了原理，就知道使用setTimeout和使用ajax是一样的意思。说起jquery，我不得不吐槽一句，jquery的Promise实现太过垃圾，各种语法糖把人都搞蒙了，我认为Promise之所以没有全面普及和jquery有很大的关系。后面我们会细讲jquery。
+
